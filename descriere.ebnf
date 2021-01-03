@@ -1,0 +1,58 @@
+program =lista_instructiuni
+lista_instructiuni = {instructiune";"}.
+
+instructiune = intructiune_atribuire
+ | instructiune_declarare
+ | instructiune_conditionala
+ | instructiune_ciclica
+ | instructiune_intrare
+ | instructiune_iesire.
+
+instructiune_declarare = tip var ";" | tip var"," {var","} var";".
+
+tip = "int" | "double" | struct.
+struct = "struct" nume_struct "{" lista_declaratii "}".
+nume_struct = ID.
+
+instructiune_atribuire = var "=" expresie.
+expresie = (operand_exp) {operator_exp operand_exp}.
+operand_exp = var | CONST.
+operator_exp = "+" | "*" | "-" | "/" | "%".
+
+instructiune_conditionala = "if (" conditie_compusa ") {" lista_instructiuni "}"
+    ["else {" lista_instructiuni "}"].
+conditie_compusa = conditie { operator_logic conditie }.
+operator_logic = "&&" | "||".
+conditie = (expresie | var | CONST) operator_comparatie (expresie | var | CONST).
+operator_comparatie = "<" | "<=" | ">" | ">=" | "==" | "!=".
+
+instructiune_ciclica = "while (" conditie_compusa ")
+    {" lista_instructiuni_extindere "}".
+lista_instructiuni_extindere = {(instructiune|"break")";"}.
+
+instructiune_intrare = "cin >> " var.
+
+instructiune_iesire = "cout << " (expresie | CONST).
+
+var = ID | var_struct.
+var_struct = ID"."ID.
+
+---------------------------------------------------------------------------------
+
+ID = (litera | "_" | "$")
+    {(litera | cifra | "_" | "$")}.
+CONST = const_numar | const_string.
+
+const_string = ghilimea {(litera | cifra | " " | "\n")} ghilimea
+ghilimea = '"'
+
+const_numar = semn (intreg | real).
+
+intreg = cifra_nenula {cifra} | "0".
+
+real = intreg "." {"0"}intreg.
+
+litera = ("a" | "b" | ... | "z" | "A" | "B" | ... | "Z").
+cifra = ("0" | cifra_nenula).
+cifra_nenula = ("1" | ... | "9").
+semn = "+" | "-" | eps
